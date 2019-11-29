@@ -1,0 +1,18 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+.home,
+.block {
+  border: 1px solid red;
+  text-align: center;
+  padding: 50px 0;
+}
+
+ul li {
+  list-style: none;
+}
+
+.block {
+  border: 1px solid blue;
+}
