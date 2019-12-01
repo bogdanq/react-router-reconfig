@@ -9,21 +9,24 @@ const userTestPermission = {
 }
 
 //rules name [string!]! =>  Administrator | Manager | Vip
+// function applyArgsToGuard(guard, args) {
+//   return context => guard({ ...context, ...args });
+// }
 
 function onlyAuth(context) {
-  return context.user.id === userTestPermission.id
+  return Boolean(context.session)
 }
 
 function onlyManager(context) {
-  return context.user.rules.some(rule => rule.name === 'Manager')
+  return context.session.user.rules.some(rule => rule.name === 'Manager')
 }
 
 function onlyAdmin(context) {
-  return context.user.rules.some(rule => rule.name === 'Administrator')
+  return context.session.user.rules.some(rule => rule.name === 'Administrator')
 }
 
 function onlyVip(context) {
-  return context.user.rules.some(rule => rule.name === 'Vip')
+  return context.session.user.rules.some(rule => rule.name === 'Vip')
 }
 
 function onlyRoles(roles) {

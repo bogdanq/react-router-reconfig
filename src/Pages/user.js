@@ -8,7 +8,7 @@ export function Cabinet(props) {
   return (
     <div>
       <Back />
-      <h1>user cabinet page userID = {props.context.user.id}</h1>
+      <h1>user cabinet page userID = {props.context.session.user.id}</h1>
       <ul>
         <li>
           <Link to="/cabinet/info">User Info (auth rule)</Link>

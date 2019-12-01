@@ -1,17 +1,24 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter, Link, Switch } from 'react-router-dom'
-import { GuardsProvider, GuardContext } from './lib/route-guard'
 import './styles.css'
 import { userTestPermission } from './rules'
 import { routes } from './route-config'
 import { createRoutes } from './lib/route-reconfig'
 
+const useUser = () => ({
+  user: userTestPermission
+})
+
 function App() {
-  const { context } = React.useContext(GuardContext)
+  const { user } = useUser()
   const Routes = React.useMemo(
-    () => createRoutes({ config: routes(context), context }),
-    [context]
+    () =>
+      createRoutes({
+        config: routes(),
+        context: { session: { user } }
+      }),
+    [user]
   )
 
   return (
@@ -35,9 +42,4 @@ export function Back() {
 }
 
 const rootElement = document.getElementById('root')
-ReactDOM.render(
-  <GuardsProvider context={{ user: userTestPermission }}>
-    <App />
-  </GuardsProvider>,
-  rootElement
-)
+ReactDOM.render(<App />, rootElement)

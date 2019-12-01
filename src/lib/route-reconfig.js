@@ -5,6 +5,7 @@ export const createRoutes = ({ config, rootPath = '', context, userProps }) => {
   return Array.isArray(config)
     ? config.reduce((acc, route, index) => {
         const path = rootPath + route.path
+
         const newRoute = (
           <Route
             key={index}
@@ -27,11 +28,11 @@ export const createRoutes = ({ config, rootPath = '', context, userProps }) => {
           />
         )
 
-        if (route.guards && !route.guards.every(item => item(context))) {
+        if (!checkGuards(route.guards, context)) {
           return acc
         }
 
-        if (Array.isArray(route.children)) {
+        if (hasRouteChildren(route)) {
           return acc.concat(newRoute)
         }
 
@@ -39,7 +40,6 @@ export const createRoutes = ({ config, rootPath = '', context, userProps }) => {
           newRoute,
           createRoutes({
             config: route.children,
-            rootPath: route.path,
             context
           })
         )
@@ -68,3 +68,11 @@ const MemoParent = React.memo(
   },
   (prev, next) => prev.props.match.path === next.props.match.path
 )
+
+const checkGuards = (guards = [], context) => {
+  return guards.every(item => item(context))
+}
+
+const hasRouteChildren = route => {
+  return Array.isArray(route.children)
+}

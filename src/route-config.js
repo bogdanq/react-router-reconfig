@@ -30,8 +30,7 @@ export const routes = () => [
         path: '/info'
       },
       {
-        component: () => <h1>you has not permission</h1>,
-        exact: true,
+        component: () => <h1>you has not permission (vip)</h1>,
         path: '/*'
       }
     ]
@@ -59,9 +58,8 @@ export const routes = () => [
         guards: [onlyAuth, onlyRoles([onlyAdmin, onlyManager])]
       },
       {
-        component: () => <h1>you has not permission</h1>,
-        exact: true,
-        path: '*'
+        component: () => <h1>you has not permission (manager/admin)</h1>,
+        path: '/*'
       }
     ]
   },
@@ -75,10 +73,9 @@ export const routes = () => [
     component: () => (
       <>
         <Back />
-        <h1>you has not permission</h1>
+        <h1>you has not permission (admin)</h1>
       </>
     ),
-    exact: true,
-    path: '*'
+    path: '/*'
   }
 ]
