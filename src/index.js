@@ -6,7 +6,7 @@ import { userTestPermission } from './rules'
 import { routes } from './route-config'
 import { createRoutes } from './lib/route-reconfig'
 
-const useUser = () => ({
+export const useUser = () => ({
   user: userTestPermission
 })
 

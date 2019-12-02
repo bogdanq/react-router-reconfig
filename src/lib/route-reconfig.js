@@ -69,7 +69,7 @@ const MemoParent = React.memo(
   (prev, next) => prev.props.match.path === next.props.match.path
 )
 
-const checkGuards = (guards = [], context) => {
+export const checkGuards = (guards = [], context) => {
   return guards.every(item => item(context))
 }
 

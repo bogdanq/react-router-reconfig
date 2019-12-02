@@ -2,11 +2,21 @@ const userTestPermission = {
   id: '0002154',
   rules: [
     {
-      name: '',
+      name: 'Administrator',
+      permissions: []
+    },
+    {
+      name: 'Vip',
       permissions: []
     }
   ]
 }
+
+//rules name [string!]! =>  Administrator | Manager | Vip
+
+// function applyArgsToGuard(guard, args) {
+//   return context => guard({ ...context, ...args });
+// }
 
 //rules name [string!]! =>  Administrator | Manager | Vip
 // function applyArgsToGuard(guard, args) {
@@ -14,19 +24,28 @@ const userTestPermission = {
 // }
 
 function onlyAuth(context) {
-  return Boolean(context.session)
+  return Boolean(context.session.user)
 }
 
 function onlyManager(context) {
-  return context.session.user.rules.some(rule => rule.name === 'Manager')
+  const user = context.session.user
+  if (user) {
+    return user.rules.some(rule => rule.name === 'Manager')
+  }
 }
 
 function onlyAdmin(context) {
-  return context.session.user.rules.some(rule => rule.name === 'Administrator')
+  const user = context.session.user
+  if (user) {
+    return user.rules.some(rule => rule.name === 'Administrator')
+  }
 }
 
 function onlyVip(context) {
-  return context.session.user.rules.some(rule => rule.name === 'Vip')
+  const user = context.session.user
+  if (user) {
+    return user.rules.some(rule => rule.name === 'Vip')
+  }
 }
 
 function onlyRoles(roles) {
@@ -35,16 +54,18 @@ function onlyRoles(roles) {
   }
 }
 
-// function besideOwner(context) {
-//   const isChatOwner = context.user.id === context.peerId;
-//   return !isChatOwner;
-// }
+function besideOwner(roles) {
+  return context => {
+    return roles.every(role => !role(context))
+  }
+}
 
 export {
   onlyAuth,
   onlyManager,
   onlyAdmin,
   onlyVip,
-  userTestPermission,
-  onlyRoles
+  onlyRoles,
+  besideOwner,
+  userTestPermission
 }
