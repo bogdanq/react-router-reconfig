@@ -1,5 +1,17 @@
 # React-router-reconfig
 
+## Installation
+
+To install, you can use [npm](https://npmjs.org/):
+
+    $ npm install react-router-reconfig
+
+## Motivation
+
+The library makes it easy to write routing in the application. Makes its structure obvious, as well as it can be divided into child configs and combined into one.
+Supports [nested routes](#Usage) (renderNestedRoute) and typescript. The library has a built-in guard system.
+When you click on child links, the parent will not be updated.
+
 ## Demo
 
 https://codesandbox.io/s/guards-x9xky
@@ -7,24 +19,30 @@ https://codesandbox.io/s/guards-x9xky
 ## Usage
 
 ```jsx
-import React from "react";
-import ReactDOM from "react-dom";
-import { BrowserRouter, Link, Switch, Redirect } from "react-router-dom";
-import { createRoutes, RenderNestedRoute, RouteTypes } from "react-router-reconfig;
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { BrowserRouter, Link, Switch, Redirect } from 'react-router-dom'
+import {
+  createRoutes,
+  RenderNestedRoute,
+  RouteTypes
+} from 'react-router-reconfig'
 
 const useUser = () => ({
   user: {
-      id: '',
-      rules: []
+    id: '',
+    rules: []
   }
-});
+})
 
 const FirstPage = () => {
   return <div>first page</div>
 }
+
 type Props = {
   renderNestedRoute: RenderNestedRoute
 }
+
 const SecondPage = ({ renderNestedRoute }: Props) => {
   return (
     <div>
@@ -46,37 +64,37 @@ const routes = (): RouteTypes => [
   {
     component: FirstPage,
     exact: true,
-    path: "/",
-    guards: [onlyAuth],
+    path: '/',
+    guards: [onlyAuth]
   },
   {
     component: SecondPage,
     exact: false,
-    path: "/second",
+    path: '/second',
     guards: [onlyAuth],
     children: [
       {
         component: SecondPageChild1,
         exact: true,
-        path: "/child-first",
-        guards: [onlyAuth, onlyAdmin],
+        path: '/child-first',
+        guards: [onlyAuth, onlyAdmin]
       },
       {
         component: SecondPageChild2,
         exact: true,
-        path: "/child-second",
+        path: '/child-second',
         guards: [onlyAuth, onlyRoles([onlyAdmin, onlyManager])],
-        fallback: () => <Redirect to='/'/>
+        fallback: () => <Redirect to="/" />
       },
       {
         component: () => <h1>page not found</h1>,
-        path: "/*",
+        path: '/*'
       }
     ]
   },
   {
     component: () => <h1>page not found</h1>,
-    path: "/*",
+    path: '/*'
   }
 ]
 
@@ -87,15 +105,17 @@ type RouteProps = {
 }
 
 function App() {
-  const { user } = useUser();
+  const { user } = useUser()
   const Routes = React.useMemo(
     () =>
-      createRoutes<RouteProps>({
+      createRoutes <
+      RouteProps >
+      {
         config: routes(),
         context: { user }
-      }),
+      },
     [user]
-  );
+  )
 
   return (
     <>
@@ -103,11 +123,11 @@ function App() {
         <Switch>{Routes}</Switch>
       </BrowserRouter>
     </>
-  );
+  )
 }
 
-const rootElement = document.getElementById("root");
-ReactDOM.render(<App />, rootElement);
+const rootElement = document.getElementById('root')
+ReactDOM.render(<App />, rootElement)
 ```
 
 ## Route-config
