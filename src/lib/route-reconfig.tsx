@@ -5,10 +5,16 @@ import {
   renderRouteFallback,
   hasRouteChildren
 } from './helpers'
+import { MemoParentProps, CreateRoutesProps } from './typings'
 
-export const createRoutes = ({ config, rootPath = '', context, userProps }) => {
+export const createRoutes = ({
+  config,
+  rootPath = '',
+  context,
+  userProps
+}: CreateRoutesProps): Array<React.ReactNode> => {
   return Array.isArray(config)
-    ? config.reduce((acc, route, index) => {
+    ? config.reduce<Array<React.ReactNode>>((acc, route, index) => {
         const path = rootPath + route.path
 
         const newRoute = (
@@ -16,7 +22,7 @@ export const createRoutes = ({ config, rootPath = '', context, userProps }) => {
             key={index}
             exact={route.exact}
             path={path}
-            component={props => {
+            component={(props: any) => {
               if (Array.isArray(route.children)) {
                 return (
                   <MemoParent
@@ -33,7 +39,10 @@ export const createRoutes = ({ config, rootPath = '', context, userProps }) => {
           />
         )
 
-        if (route.guards && !checkRouteGuards(route.guards, context)) {
+        if (
+          Array.isArray(route.guards) &&
+          !checkRouteGuards(route.guards, context)
+        ) {
           if (route.fallback) {
             return acc.concat(renderRouteFallback(route))
           }
@@ -56,12 +65,12 @@ export const createRoutes = ({ config, rootPath = '', context, userProps }) => {
 }
 
 const MemoParent = React.memo(
-  ({ props, route, context, path }) => {
+  ({ props, route, context, path }: MemoParentProps) => {
     return (
       <route.component
         {...props}
         context={context}
-        renderNestedRoute={userProps => (
+        renderNestedRoute={(userProps: object) => (
           <Switch>
             {createRoutes({
               config: route.children,

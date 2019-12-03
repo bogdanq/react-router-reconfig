@@ -16,7 +16,7 @@ function App() {
     () =>
       createRoutes({
         config: routes(),
-        context: { session: { user } }
+        context: { user }
       }),
     [user]
   )

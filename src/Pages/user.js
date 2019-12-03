@@ -10,7 +10,7 @@ export function Cabinet(props) {
   return (
     <div>
       <Back />
-      <h1>user cabinet page userID = {props.context.session.user.id}</h1>
+      <h1>user cabinet page userID = {props.context.user.id}</h1>
       <WithAccount render={LinkForAuth} />
       {/* required renderNestedRoute */}
       {props.renderNestedRoute({ someProps: 'test1' })}

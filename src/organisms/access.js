@@ -6,7 +6,7 @@ export const Access = ({ children, permissions, guards }) => {
   const { user } = useUser()
 
   const hasCompletedGuards = React.useCallback(
-    () => checkRouteGuards(guards, { session: { user } }),
+    () => checkRouteGuards(guards, { user }),
     [guards, user]
   )
 
