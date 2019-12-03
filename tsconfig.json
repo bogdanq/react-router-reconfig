@@ -8,18 +8,13 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "target": "es5",
-    "jsx": "preserve",
-    "module": "esnext",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "allowJs": true,
-    "isolatedModules": true,
-    "noEmit": true
+    "jsx": "react",
+    "module": "CommonJS",
+    "outDir": "dist",
+    "rootDir": "src/lib",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "declaration": true
   },
-  "include": [
-    "src"
-  ]
+  "exclude": ["node_modules"],
+  "include": ["src/lib"]
 }
