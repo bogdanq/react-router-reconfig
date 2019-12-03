@@ -1,9 +1,32 @@
 {
-  "name": "guards",
+  "name": "react-router-reconfig",
   "version": "1.0.0",
-  "description": "",
-  "keywords": [],
-  "main": "src/index.js",
+  "description": "Wrapper for react-router",
+  "keywords": [
+    "react",
+    "react-router",
+    "router",
+    "router-confog",
+    "config"
+  ],
+  "authors": [
+    "Bogdan"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bogdanq/react-router-reconfiggit"
+  },
+  "bugs": "https://github.com/bogdanq/react-router-reconfig/issues",
+  "homepage": "https://github.com/bogdanq/react-router-reconfig",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "build:ts": "tsc"
+  },
   "dependencies": {},
   "devDependencies": {
     "@types/react-dom": "16.9.4",
@@ -13,13 +36,6 @@
     "react-router-dom": "5.1.2",
     "react-scripts": "3.0.1",
     "typescript": "3.3.3"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "build:ts": "tsc"
   },
   "browserslist": [
     ">0.2%",
