@@ -5,22 +5,17 @@ import {
   renderRouteFallback,
   hasRouteChildren
 } from './helpers'
-import { MemoParentProps, CreateRoutesProps } from './typings'
+import { MemoParent, CreateRoutes } from './typings'
 
 export function createRoutes<Context>({
   config,
   rootPath = '',
   context,
   userProps
-}: CreateRoutesProps<Context>): Array<React.ReactNode> {
+}: CreateRoutes<Context>): Array<React.ReactNode> {
   return Array.isArray(config)
     ? config.reduce<Array<React.ReactNode>>((acc, route, index) => {
         const path = rootPath + route.path
-
-        const RootMemoRoute = React.memo(
-          getParentRoute<Context>(),
-          (prev, next) => prev.props.match.path === next.props.match.path
-        )
 
         const newRoute = (
           <Route
@@ -73,8 +68,8 @@ export function createRoutes<Context>({
     : []
 }
 
-function getParentRoute<Context>() {
-  return ({ props, route, context, path }: MemoParentProps<Context>) => {
+const RootMemoRoute = React.memo(
+  ({ props, route, context, path }: MemoParent<any>) => {
     return (
       <route.component
         {...props}
@@ -91,5 +86,6 @@ function getParentRoute<Context>() {
         )}
       />
     )
-  }
-}
+  },
+  (prev, next) => prev.props.match.path === next.props.match.path
+)
