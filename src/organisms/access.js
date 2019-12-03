@@ -1,12 +1,12 @@
 import React from 'react'
 import { useUser } from '../'
-import { checkGuards } from '../lib/route-reconfig'
+import { checkRouteGuards } from '../lib/helpers'
 
 export const Access = ({ children, permissions, guards }) => {
   const { user } = useUser()
 
   const hasCompletedGuards = React.useCallback(
-    () => checkGuards(guards, { session: { user } }),
+    () => checkRouteGuards(guards, { session: { user } }),
     [guards, user]
   )
 

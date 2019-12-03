@@ -5,6 +5,7 @@ import { onlyAuth, onlyVip, onlyRoles, onlyAdmin, onlyManager } from './rules'
 import { PostList, Posts, PostCreate, PostUpdate } from './Pages/posts'
 import { Admin } from './Pages/admin'
 import { Back } from '.'
+import { Redirect } from 'react-router-dom'
 
 export const routes = () => [
   {
@@ -67,6 +68,8 @@ export const routes = () => [
     component: Admin,
     exact: true,
     path: '/admin',
+    /** Можно обработать редирект на конкретной странице, либо передать 404 - уникальную для всех страниц */
+    fallback: () => <Redirect to="/" />,
     guards: [onlyAuth, onlyAdmin]
   },
   {

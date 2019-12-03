@@ -1,5 +1,10 @@
 import React from 'react'
-import { Switch, Route } from 'react-router'
+import { Switch, Route } from 'react-router-dom'
+import {
+  checkRouteGuards,
+  renderRouteFallback,
+  hasRouteChildren
+} from './helpers'
 
 export const createRoutes = ({ config, rootPath = '', context, userProps }) => {
   return Array.isArray(config)
@@ -28,7 +33,10 @@ export const createRoutes = ({ config, rootPath = '', context, userProps }) => {
           />
         )
 
-        if (!checkGuards(route.guards, context)) {
+        if (route.guards && !checkRouteGuards(route.guards, context)) {
+          if (route.fallback) {
+            return acc.concat(renderRouteFallback(route))
+          }
           return acc
         }
 
@@ -68,11 +76,3 @@ const MemoParent = React.memo(
   },
   (prev, next) => prev.props.match.path === next.props.match.path
 )
-
-export const checkGuards = (guards = [], context) => {
-  return guards.every(item => item(context))
-}
-
-const hasRouteChildren = route => {
-  return Array.isArray(route.children)
-}
