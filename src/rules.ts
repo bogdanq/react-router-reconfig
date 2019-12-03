@@ -1,18 +1,25 @@
-import { Roles, Context } from './lib/typings'
-
 const userTestPermission = {
   id: '0002154',
   rules: [
     {
-      name: '',
+      name: 'Administrator',
+      permissions: []
+    },
+    {
+      name: 'Vip',
       permissions: []
     }
-    // {
-    //   name: "Vip",
-    //   permissions: []
-    // }
   ]
 }
+
+export type Context = {
+  user?: {
+    id: string
+    rules: Array<{ rules: [string]; name: string }>
+  }
+}
+
+export type Roles = (arg: Context) => boolean
 
 //rules name [string!]! =>  Administrator | Manager | Vip
 

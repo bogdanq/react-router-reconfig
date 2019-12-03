@@ -1,7 +1,9 @@
-export type MemoParentProps = {
+import React from 'react'
+
+export type MemoParentProps<Context> = {
   route: {
-    children: any
-    component: any
+    children: Array<RoutePropsFoo<Context>>
+    component: React.ComponentType<any>
   }
   path: string
   context: Context
@@ -12,36 +14,25 @@ export type MemoParentProps = {
   }
 }
 
-// rules.ts
-export type Context = {
-  user?: {
-    id: string
-    rules: Array<{ rules: [string]; name: string }>
-  }
-}
-
-export type RoutePropsFoo = {
+export type RoutePropsFoo<Context> = {
   path: string
   exact: boolean
-  children: any
-  component: any
-  fallback: React.ComponentType
-  guards?: Array<Roles>
+  children: Array<RoutePropsFoo<Context>>
+  component: (arg: any) => any
+  fallback?: React.ComponentType
+  guards?: Array<(context: Context) => boolean>
 }
 
-export type CreateRoutesProps = {
-  config: Array<RoutePropsFoo>
+export interface CreateRoutesProps<Context> {
+  config: Array<RoutePropsFoo<Context>>
   rootPath?: string
   context: Context
   userProps?: object
 }
-
-// rules.ts
-export type Roles = (arg: Context) => boolean
 
 export type FallbackHelper = {
   fallback: React.ComponentType
   path: string
 }
 
-export type RouteProps = { children: React.ReactChildren }
+export type RouteProps<Context> = { children: Array<RoutePropsFoo<Context>> }

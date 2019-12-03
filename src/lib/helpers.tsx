@@ -1,16 +1,21 @@
 import React from 'react'
 import { Route } from 'react-router-dom'
-import { RoutePropsFoo, Context, Roles, RouteProps } from './typings'
+import { RoutePropsFoo, RouteProps } from './typings'
 
-const checkRouteGuards = (guards: Array<Roles>, context: Context) => {
+function checkRouteGuards<Context>(
+  guards: Array<(context: Context) => boolean>,
+  context: Context
+) {
   return guards.every(item => item(context))
 }
 
-const hasRouteChildren = (route: RouteProps) => {
+function hasRouteChildren<Context>(route: RouteProps<Context>) {
   return Array.isArray(route.children)
 }
 
-const renderRouteFallback = (props: RoutePropsFoo): React.ReactNode => {
+function renderRouteFallback<Context>(
+  props: RoutePropsFoo<Context>
+): React.ReactNode {
   return <Route {...props} component={props.fallback} key={props.path} />
 }
 

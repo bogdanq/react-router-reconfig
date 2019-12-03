@@ -7,25 +7,34 @@ import {
 } from './helpers'
 import { MemoParentProps, CreateRoutesProps } from './typings'
 
-export const createRoutes = ({
+export function createRoutes<Context>({
   config,
   rootPath = '',
   context,
   userProps
-}: CreateRoutesProps): Array<React.ReactNode> => {
+}: CreateRoutesProps<Context>): Array<React.ReactNode> {
   return Array.isArray(config)
     ? config.reduce<Array<React.ReactNode>>((acc, route, index) => {
         const path = rootPath + route.path
+
+        const RootMemoRoute = React.memo(
+          getParentRoute<Context>(),
+          (prev, next) => prev.props.match.path === next.props.match.path
+        )
 
         const newRoute = (
           <Route
             key={index}
             exact={route.exact}
             path={path}
-            component={(props: any) => {
+            component={(props: {
+              match: {
+                path: string
+              }
+            }) => {
               if (Array.isArray(route.children)) {
                 return (
-                  <MemoParent
+                  <RootMemoRoute
                     route={route}
                     context={context}
                     path={path}
@@ -41,15 +50,15 @@ export const createRoutes = ({
 
         if (
           Array.isArray(route.guards) &&
-          !checkRouteGuards(route.guards, context)
+          !checkRouteGuards<Context>(route.guards, context)
         ) {
           if (route.fallback) {
-            return acc.concat(renderRouteFallback(route))
+            return acc.concat(renderRouteFallback<Context>(route))
           }
           return acc
         }
 
-        if (hasRouteChildren(route)) {
+        if (hasRouteChildren<Context>(route)) {
           return acc.concat(newRoute)
         }
 
@@ -64,8 +73,8 @@ export const createRoutes = ({
     : []
 }
 
-const MemoParent = React.memo(
-  ({ props, route, context, path }: MemoParentProps) => {
+function getParentRoute<Context>() {
+  return ({ props, route, context, path }: MemoParentProps<Context>) => {
     return (
       <route.component
         {...props}
@@ -82,6 +91,5 @@ const MemoParent = React.memo(
         )}
       />
     )
-  },
-  (prev, next) => prev.props.match.path === next.props.match.path
-)
+  }
+}
