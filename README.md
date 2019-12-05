@@ -1,5 +1,17 @@
 # React-router-reconfig
 
+## Installation
+
+To install, you can use [npm](https://npmjs.org/):
+
+    $ npm install react-router-reconfig
+
+## Motivation
+
+The library makes it easy to write routing in the application. Makes its structure obvious, as well as it can be divided into child configs and combined into one.
+Supports [nested routes](#Usage) (renderNestedRoute) and typescript. The library has a built-in guard system.
+When you click on child links, the parent will not be updated.
+
 ## Demo
 
 https://codesandbox.io/s/guards-x9xky
@@ -7,52 +19,103 @@ https://codesandbox.io/s/guards-x9xky
 ## Usage
 
 ```jsx
-import React from "react";
-import ReactDOM from "react-dom";
-import { BrowserRouter, Link, Switch } from "react-router-dom";
-import { createRoutes } from "react-router-reconfig;
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { BrowserRouter, Link, Switch, Redirect } from 'react-router-dom'
+import {
+  createRoutes,
+  RenderNestedRoute,
+  RouteTypes
+} from 'react-router-reconfig'
 
 const useUser = () => ({
   user: {
-      id: '',
-      rules: []
+    id: '',
+    rules: []
   }
-});
+})
 
-const routes = () => [
+const FirstPage = () => {
+  return <div>first page</div>
+}
+
+type Props = {
+  renderNestedRoute: RenderNestedRoute
+}
+
+const SecondPage = ({ renderNestedRoute }: Props) => {
+  return (
+    <div>
+      <h1>second page</h1>
+      {renderNestedRoute({ someProps: 'someProps' })}
+    </div>
+  )
+}
+
+const SecondPageChild1 = () => {
+  return <div>second page SecondPageChild1</div>
+}
+
+const SecondPageChild2 = () => {
+  return <div>second page SecondPageChild2</div>
+}
+
+const routes = (): RouteTypes => [
   {
-    component: SomeComponent,
+    component: FirstPage,
     exact: true,
-    path: "/"
+    path: '/',
+    guards: [onlyAuth]
   },
   {
-    component: SomeComponent,
+    component: SecondPage,
     exact: false,
-    path: "/user",
+    path: '/second',
+    guards: [onlyAuth],
     children: [
       {
-        component: SomeComponent,
+        component: SecondPageChild1,
         exact: true,
-        path: "/cabinet",
+        path: '/child-first',
+        guards: [onlyAuth, onlyAdmin]
+      },
+      {
+        component: SecondPageChild2,
+        exact: true,
+        path: '/child-second',
+        guards: [onlyAuth, onlyRoles([onlyAdmin, onlyManager])],
+        fallback: () => <Redirect to="/" />
+      },
+      {
+        component: () => <h1>page not found</h1>,
+        path: '/*'
       }
     ]
   },
   {
-    component: () => <>page not found</>,
-     path: "/*",
+    component: () => <h1>page not found</h1>,
+    path: '/*'
   }
 ]
 
+type RouteProps = {
+  user: {
+    id: number
+  }
+}
+
 function App() {
-  const { user } = useUser();
+  const { user } = useUser()
   const Routes = React.useMemo(
     () =>
-      createRoutes({
+      createRoutes <
+      RouteProps >
+      {
         config: routes(),
         context: { user }
-      }),
+      },
     [user]
-  );
+  )
 
   return (
     <>
@@ -60,49 +123,56 @@ function App() {
         <Switch>{Routes}</Switch>
       </BrowserRouter>
     </>
-  );
+  )
 }
 
-const rootElement = document.getElementById("root");
-ReactDOM.render(<App />, rootElement);
+const rootElement = document.getElementById('root')
+ReactDOM.render(<App />, rootElement)
 ```
 
 ## Route-config
 
-|    name     |                        Type                         |     description     | required |               links               |
-| :---------: | :-------------------------------------------------: | :-----------------: | :------: | :-------------------------------: |
-| `component` |                      ReactNode                      | modal open function |  false   |
-|   `exact`   |                       boolean                       | modal close request |   true   |
-|   `path`    |                       string                        |    opened modals    |   true   |
-| `children`  |                      Array<{}>                      |   id active modal   |  false   |
-|  `guards`   | Array<[(context: createRoutes context) => boolean]> |        false        |  false   | [example-guards](#Example-guards) |
-| `fallback`  |                      ReactNode                      |        false        |  false   |
+|    name     |          Type          |     description     | required |           links            |
+| :---------: | :--------------------: | :-----------------: | :------: | :------------------------: |
+| `component` |       ReactNode        | modal open function |  false   |
+|   `exact`   |        boolean         | modal close request |   true   |
+|   `path`    |         string         |    opened modals    |   true   |
+| `children`  |       Array<{}>        |   id active modal   |  false   |
+|  `guards`   | [(context) => boolean] |        false        |  false   | [example](#Example-guards) |
+| `fallback`  |       ReactNode        |        false        |  false   |
 
 ## createRoutes types
 
-|   name    |  Type  |      description      | required |             links              |
-| :-------: | :----: | :-------------------: | :------: | :----------------------------: |
-| `config`  | array  |  modal open function  |   true   | [example-types](#Route-config) |
-| `context` | object |  modal close request  |   true   |
-| `generic` | custom | createRoutes<Context> |  false   |
+|   name    |  Type  |        description        | required |          links           |
+| :-------: | :----: | :-----------------------: | :------: | :----------------------: |
+| `config`  | array  |       router-config       |   true   | [example](#Route-config) |
+| `context` | object |           user            |   true   |
+| `generic` | custom | createRoutes<you generic> |  false   |
 
 ## renderNestedRoute types
 
-|  name   |  Type  |     description     | required |
-| :-----: | :----: | :-----------------: | :------: |
-| `props` | object | modal close request |  false   |
+|  name   |  Type  | description | required |
+| :-----: | :----: | :---------: | :------: |
+| `props` | object |  you props  |  false   |
 
 ## Example-guards
 
 ```jsx
 function onlyAuth(context) {
-  return Boolean(context.session.user)
+  return Boolean(context.user)
 }
 
 function onlyAdmin(context) {
-  const user = context.session.user
+  const user = context.user
   if (user) {
     return user.rules.some(rule => rule.name === 'Administrator')
+  }
+}
+
+function onlyManager(context) {
+  const user = context.user
+  if (user) {
+    return user.rules.some(rule => rule.name === 'Manager')
   }
 }
 

@@ -1,38 +1,34 @@
 import React from 'react'
 
-export type MemoParentProps<Context> = {
-  route: {
-    children: Array<RoutePropsFoo<Context>>
-    component: React.ComponentType<any>
-  }
+export type MemoParent<Context> = {
+  route: RouteType<Context>
   path: string
   context: Context
-  props: {
-    match: {
-      path: string
-    }
-  }
+  props: any
 }
 
-export type RoutePropsFoo<Context> = {
+export type RouteType<Context> = {
   path: string
-  exact: boolean
-  children: Array<RoutePropsFoo<Context>>
-  component: (arg: any) => any
+  exact?: boolean
+  children?: Array<RouteType<Context>> | null
+  component: (props: {
+    userProps?: object
+    match: { path: string }
+  }) => JSX.Element
   fallback?: React.ComponentType
   guards?: Array<(context: Context) => boolean>
 }
 
-export interface CreateRoutesProps<Context> {
-  config: Array<RoutePropsFoo<Context>>
+export interface CreateRoutes<Context> {
+  config?: Array<RouteType<Context>> | null
   rootPath?: string
   context: Context
   userProps?: object
 }
 
-export type FallbackHelper = {
-  fallback: React.ComponentType
-  path: string
+export type RouteProps<Context> = {
+  children?: Array<RouteType<Context>> | null
 }
 
-export type RouteProps<Context> = { children: Array<RoutePropsFoo<Context>> }
+export type RenderNestedRoute = (userProps: object) => JSX.Element
+export type RouteTypes<Context> = Array<RouteType<Context>>

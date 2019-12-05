@@ -37,6 +37,8 @@ function onlyManager(context: Context) {
   if (user) {
     return user.rules.some(rule => rule.name === 'Manager')
   }
+
+  return false
 }
 
 function onlyAdmin(context: Context) {
@@ -44,6 +46,8 @@ function onlyAdmin(context: Context) {
   if (user) {
     return user.rules.some(rule => rule.name === 'Administrator')
   }
+
+  return false
 }
 
 function onlyVip(context: Context) {
@@ -51,6 +55,8 @@ function onlyVip(context: Context) {
   if (user) {
     return user.rules.some(rule => rule.name === 'Vip')
   }
+
+  return false
 }
 
 function onlyRoles(roles: Array<Roles>) {
@@ -59,6 +65,8 @@ function onlyRoles(roles: Array<Roles>) {
     if (user) {
       return roles.some(role => role(context))
     }
+
+    return false
   }
 }
 

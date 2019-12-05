@@ -1,6 +1,6 @@
 import React from 'react'
 import { Route } from 'react-router-dom'
-import { RoutePropsFoo, RouteProps } from './typings'
+import { RouteType, RouteProps } from './typings'
 
 function checkRouteGuards<Context>(
   guards: Array<(context: Context) => boolean>,
@@ -13,9 +13,7 @@ function hasRouteChildren<Context>(route: RouteProps<Context>) {
   return Array.isArray(route.children)
 }
 
-function renderRouteFallback<Context>(
-  props: RoutePropsFoo<Context>
-): React.ReactNode {
+function renderRouteFallback<Context>(props: RouteType<Context>) {
   return <Route {...props} component={props.fallback} key={props.path} />
 }
 
