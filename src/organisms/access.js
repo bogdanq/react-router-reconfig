@@ -1,9 +1,10 @@
 import React from 'react'
-import { useUser } from '../'
 import { checkRouteGuards } from '../lib/helpers'
+import { useStore } from 'effector-react'
+import { $user } from '../model'
 
 export const Access = ({ children, permissions, guards }) => {
-  const { user } = useUser()
+  const user = useStore($user)
 
   const hasCompletedGuards = React.useCallback(
     () => checkRouteGuards(guards, { user }),

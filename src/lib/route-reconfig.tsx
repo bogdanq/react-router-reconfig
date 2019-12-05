@@ -48,7 +48,10 @@ export function createRoutes<Context>({
           !checkRouteGuards<Context>(route.guards, context)
         ) {
           if (route.fallback) {
-            return acc.concat(renderRouteFallback<Context>(route))
+            const isDeleteRouteChildren = { ...route, children: [] }
+            return acc.concat(
+              renderRouteFallback<Context>(isDeleteRouteChildren)
+            )
           }
           return acc
         }

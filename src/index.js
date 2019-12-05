@@ -1,20 +1,15 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter, Link, Switch } from 'react-router-dom'
-import './styles.css'
-import { userTestPermission } from './rules'
 import { routes } from './route-config'
 import { createRoutes } from './lib/route-reconfig'
-
-export const useUser = () => {
-  const [state] = React.useState(userTestPermission)
-  return {
-    user: state
-  }
-}
+import { useStore } from 'effector-react'
+import { $user } from './model'
+import './styles.css'
 
 function App() {
-  const { user } = useUser()
+  const user = useStore($user)
+
   const Routes = React.useMemo(
     () =>
       createRoutes({

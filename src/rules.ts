@@ -2,11 +2,7 @@ const userTestPermission = {
   id: '0002154',
   rules: [
     {
-      name: 'Administrator',
-      permissions: []
-    },
-    {
-      name: 'Vip',
+      name: '',
       permissions: []
     }
   ]

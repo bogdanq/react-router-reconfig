@@ -17,6 +17,7 @@ export const routes = () => [
     component: Cabinet,
     path: '/cabinet',
     guards: [onlyAuth],
+    fallback: () => <Redirect to="/" />,
     children: [
       {
         component: VipUser,

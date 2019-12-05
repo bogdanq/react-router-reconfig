@@ -1,7 +1,8 @@
-import { useUser } from '../'
+import { useStore } from 'effector-react'
+import { $user } from '../model'
 
 export const WithAccount = ({ renderExists, renderEmpty, render }) => {
-  const { user } = useUser()
+  const user = useStore($user)
 
   if (user && renderExists) {
     return renderExists({ account: user, accountId: user.id })
