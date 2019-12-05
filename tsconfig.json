@@ -12,19 +12,9 @@
     "module": "esnext",
     "outDir": "dist",
     "rootDir": "src/lib",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "noEmit": true,
-    "allowJs": true,
-    "isolatedModules": true
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "declaration": true
   },
-  "exclude": [
-    "node_modules"
-  ],
-  "include": [
-    "src/lib"
-  ]
+  "exclude": ["node_modules"],
+  "include": ["src/lib"]
 }
