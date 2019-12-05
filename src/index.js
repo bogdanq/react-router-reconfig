@@ -6,9 +6,12 @@ import { userTestPermission } from './rules'
 import { routes } from './route-config'
 import { createRoutes } from './lib/route-reconfig'
 
-export const useUser = () => ({
-  user: userTestPermission
-})
+export const useUser = () => {
+  const [state] = React.useState(userTestPermission)
+  return {
+    user: state
+  }
+}
 
 function App() {
   const { user } = useUser()

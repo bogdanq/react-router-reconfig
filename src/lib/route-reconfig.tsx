@@ -17,11 +17,6 @@ export function createRoutes<Context>({
     ? config.reduce<Array<React.ReactNode>>((acc, route, index) => {
         const path = rootPath + route.path
 
-        const RootMemoRoute = React.memo(
-          getParentRoute<Context>(),
-          (prev, next) => prev.props.match.path === next.props.match.path
-        )
-
         const newRoute = (
           <Route
             key={index}
@@ -43,7 +38,7 @@ export function createRoutes<Context>({
                 )
               }
 
-              return route.component({ ...props, userProps })
+              return route.component({ ...props, ...userProps })
             }}
           />
         )
@@ -73,12 +68,11 @@ export function createRoutes<Context>({
     : []
 }
 
-function getParentRoute<Context>() {
-  return ({ props, route, context, path }: MemoParentProps<Context>) => {
+const RootMemoRoute = React.memo(
+  ({ props, route, context, path }: MemoParentProps<any>) => {
     return (
       <route.component
         {...props}
-        context={context}
         renderNestedRoute={(userProps: object) => (
           <Switch>
             {createRoutes({
@@ -91,5 +85,6 @@ function getParentRoute<Context>() {
         )}
       />
     )
-  }
-}
+  },
+  (prev, next) => prev.props.match.path === next.props.match.path
+)

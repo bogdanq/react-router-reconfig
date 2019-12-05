@@ -5,12 +5,12 @@ import { WithAccount, Access } from '../organisms'
 import { onlyVip } from '../rules'
 
 export function Cabinet(props) {
-  console.log('update: Cabinet')
+  console.log('update: Cabinet', props)
 
   return (
     <div>
       <Back />
-      <h1>user cabinet page userID = {props.context.user.id}</h1>
+      <h1>user cabinet page </h1>
       <WithAccount render={LinkForAuth} />
       {/* required renderNestedRoute */}
       {props.renderNestedRoute({ someProps: 'test1' })}
@@ -36,6 +36,7 @@ export function VipUser(props) {
 }
 
 export function UserInfo(props) {
+  console.log('update: UserInfo', props)
   return (
     <div className="block">
       <h1>UserInfo user</h1>

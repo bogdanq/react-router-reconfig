@@ -15,7 +15,6 @@ export const routes = () => [
   },
   {
     component: Cabinet,
-    exact: false,
     path: '/cabinet',
     guards: [onlyAuth],
     children: [
@@ -38,7 +37,6 @@ export const routes = () => [
   },
   {
     component: PostList,
-    exact: false,
     path: '/posts',
     children: [
       {
