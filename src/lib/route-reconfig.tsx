@@ -72,7 +72,7 @@ export function createRoutes<Context>({
 }
 
 const RootMemoRoute = React.memo(
-  ({ props, route, context, path }: MemoParentProps<any>) => {
+  ({ props, route, context, path }: MemoParent<any>) => {
     return (
       <route.component
         {...props}
