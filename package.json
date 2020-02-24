@@ -21,7 +21,7 @@
   "homepage": "https://github.com/bogdanq/react-router-reconfig",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc --build tsconfig.json && babel dist -d dist",
+    "build": "tsc",
     "demo": "parcel --out-dir demo/dist demo/index.html"
   },
   "dependencies": {},
@@ -34,8 +34,6 @@
     "@babel/preset-react": "7.8.3",
     "@types/react-dom": "16.9.4",
     "@types/react-router-dom": "5.1.3",
-    "babel-cli": "6.26.0",
-    "babel-core": "6.26.3",
     "babel-preset-minify": "0.5.1",
     "copyfiles": "2.2.0",
     "effector": "20.7.1",
