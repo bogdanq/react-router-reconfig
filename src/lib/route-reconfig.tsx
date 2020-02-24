@@ -15,7 +15,7 @@ export function createRoutes<Context>({
 }: CreateRoutes<Context>): Array<React.ReactNode> {
   return Array.isArray(config)
     ? config.reduce<Array<React.ReactNode>>((acc, route, index) => {
-        const path = rootPath + route.path
+        const path = rootPath + route.path.replace(/\*/g, '/*')
 
         const newRoute = (
           <Route
@@ -64,13 +64,15 @@ export function createRoutes<Context>({
           return acc.concat(newRoute)
         }
 
-        return acc.concat(
-          newRoute,
-          createRoutes({
-            config: route.children,
-            context
-          })
-        )
+        return acc
+          .concat(
+            newRoute,
+            createRoutes({
+              config: route.children,
+              context
+            })
+          )
+          .filter(Boolean)
       }, [])
     : []
 }
