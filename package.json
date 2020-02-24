@@ -21,7 +21,6 @@
   "homepage": "https://github.com/bogdanq/react-router-reconfig",
   "main": "dist/index.js",
   "scripts": {
-    "start": "react-scripts start",
     "build": "tsc --build tsconfig.json && babel dist -d dist",
     "demo": "parcel --out-dir demo/dist demo/index.html"
   },

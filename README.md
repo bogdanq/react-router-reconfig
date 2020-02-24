@@ -63,7 +63,6 @@ const SecondPageChild2 = () => {
 const routes = (): RouteTypes => [
   {
     component: FirstPage,
-    exact: true,
     path: '/',
     guards: [onlyAuth]
   },
@@ -75,26 +74,24 @@ const routes = (): RouteTypes => [
     children: [
       {
         component: SecondPageChild1,
-        exact: true,
         path: '/child-first',
         guards: [onlyAuth, onlyAdmin]
       },
       {
         component: SecondPageChild2,
-        exact: true,
         path: '/child-second',
         guards: [onlyAuth, onlyRoles([onlyAdmin, onlyManager])],
         fallback: () => <Redirect to="/" />
       },
       {
         component: () => <h1>page not found</h1>,
-        path: '/*'
+        path: '*'
       }
     ]
   },
   {
     component: () => <h1>page not found</h1>,
-    path: '/*'
+    path: '*'
   }
 ]
 
