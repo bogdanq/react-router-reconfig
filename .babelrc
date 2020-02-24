@@ -1,0 +1,14 @@
+{
+  "presets": [
+    ["minify"],
+    [
+      "@babel/preset-env",
+      {
+        "modules": "commonjs",
+        "useBuiltIns": "usage",
+        "corejs": 3
+      }
+    ],
+    "@babel/preset-react"
+  ]
+}

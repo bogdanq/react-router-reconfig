@@ -45,13 +45,13 @@ function onlyAdAgent(context: Context) {
 }
 
 function onlyRoles(roles: Array<Roles>) {
-  return context => {
+  return (context: Context) => {
     return roles.some(role => role(context))
   }
 }
 
 function besideOwner(roles: Array<Roles>) {
-  return context => {
+  return (context: Context) => {
     return roles.every(role => !role(context))
   }
 }
