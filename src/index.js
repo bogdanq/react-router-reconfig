@@ -21,16 +21,16 @@ function App() {
       }),
     [user]
   )
-  console.log(Routes)
+
   return (
-    <BrowserRouter>
+    <>
       <MainTemplate>
         <Styles />
         <Transition>
           <Switch>{Routes}</Switch>
         </Transition>
       </MainTemplate>
-    </BrowserRouter>
+    </>
   )
 }
 
@@ -52,4 +52,9 @@ const Styles = createGlobalStyle(css`
 `)
 
 const rootElement = document.getElementById('root')
-ReactDOM.render(<App />, rootElement)
+ReactDOM.render(
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>,
+  rootElement
+)

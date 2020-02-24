@@ -24,6 +24,11 @@
     "build": "tsc",
     "demo": "parcel --out-dir demo/dist demo/index.html"
   },
+  "peerDependencies": {
+    "react": "^16.12.0",
+    "react-dom": "16.8.6",
+    "react-router-dom": "5.1.2"
+  },
   "dependencies": {},
   "devDependencies": {
     "@babel/cli": "7.8.4",
@@ -39,9 +44,6 @@
     "effector": "20.7.1",
     "effector-react": "20.4.2",
     "parcel": "1.12.4",
-    "react": "16.8.6",
-    "react-dom": "16.8.6",
-    "react-router-dom": "5.1.2",
     "react-transition-group": "4.3.0",
     "styled-components": "5.0.1",
     "typescript": "3.3.3"

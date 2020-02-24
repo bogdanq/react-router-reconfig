@@ -27,9 +27,10 @@ export function createRoutes<Context>({
                 path: string
               }
             }) => {
+              // если указаны дочерние компоненты - отрисовать
               if (Array.isArray(route.children)) {
                 return (
-                  <RootMemoRoute
+                  <RenderChildren
                     route={route}
                     context={context}
                     path={path}
@@ -38,25 +39,30 @@ export function createRoutes<Context>({
                 )
               }
 
+              // если дочерних компонентов нет - вернуть переданнй компонент
+              // передав props - компоненты, а так же userProps - кастомный пропсы
               return route.component({ ...props, ...userProps })
             }}
           />
         )
 
+        // Если есть guards - пробежать по всем и проверить
         if (
           Array.isArray(route.guards) &&
           !checkRouteGuards<Context>(route.guards, context)
         ) {
           if (route.fallback) {
-            const isDeleteRouteChildren = {
-              ...route,
-              exact: route.exact === false ? route.exact : true,
-              children: []
-            }
+            // Если есть fallback - создать Route, передать пропсы в него, вместо компонента
+            // Положить в аккумулятор новый коммпонент
             return acc.concat(
-              renderRouteFallback<Context>(isDeleteRouteChildren)
+              renderRouteFallback<Context>({
+                ...route,
+                exact: route.exact === false ? route.exact : true,
+                children: []
+              })
             )
           }
+
           return acc
         }
 
@@ -77,7 +83,7 @@ export function createRoutes<Context>({
     : []
 }
 
-const RootMemoRoute = React.memo(
+const RenderChildren = React.memo(
   ({ props, route, context, path }: MemoParent<any>) => {
     return (
       <route.component
