@@ -1,57 +1,36 @@
 import React from 'react'
-import { Back } from '..'
-import { Link } from 'react-router-dom'
-import { WithAccount, Access } from '../organisms'
-import { onlyAdmin } from '../rules'
-import { signIn, signOut } from '../model'
+import { changeRole } from '../model'
+import { WithAccount } from '../organisms/with-account'
 
-export function HomePage({ changeUser }) {
+export const Cabinet = props => {
   return (
-    <div className="home">
-      <WithAccount
-        renderExists={({ accountId }) => (
-          <Loggined changeUser={changeUser} accountId={accountId} />
-        )}
-        renderEmpty={() => <Offline changeUser={changeUser} />}
-      />
+    <WithAccount
+      renderExists={({ account }) => (
+        <>
+          <>
+            <h1>Кабинет</h1>
+            <h2>Роль: {JSON.stringify(account.rules.role)}</h2>
 
-      <h1>Home page</h1>
-      <Back />
-      <Navigation />
-    </div>
+            <p>Доступна всем пользователям, кроме [не авторизованные]</p>
+            <button onClick={() => changeRole('Partner')}>Partner</button>
+            <button onClick={() => changeRole('AdAgent')}>AdAgent</button>
+            <button onClick={() => changeRole('Manager')}>Manager</button>
+            <button onClick={() => changeRole('Administrator')}>
+              Administrator
+            </button>
+          </>
+          {props.renderNestedRoute()}
+        </>
+      )}
+    />
   )
 }
 
-const Navigation = () => (
+export const CabinetFallback = () => (
   <>
-    <Link to="/posts">Posts (all rule)</Link>
-    <WithAccount renderExists={LinksForAuth} />
+    <h1>Кабинет не доступен</h1>
+    <p>Можно редиректить, можно показать, что нет прав</p>
+    <p> Можно указать, кому закрыть или разрешить:</p>
+    <p>guards: [besideOwner([onlyAuth])]</p>
   </>
 )
-
-const LinksForAuth = () => (
-  <>
-    <Link to="/cabinet">user cabinet (auth rule)</Link>
-    <Access guards={[onlyAdmin]}>
-      <Link to="/admin">Admin panel (admin rule)</Link>
-    </Access>
-  </>
-)
-
-const Loggined = ({ accountId }) => {
-  return (
-    <div>
-      <h3>loggined id: {accountId}</h3>
-      <button onClick={signOut}>Exit</button>
-    </div>
-  )
-}
-
-const Offline = () => {
-  return (
-    <div>
-      <h3>offline</h3>
-      <button onClick={signIn}>Login</button>
-    </div>
-  )
-}

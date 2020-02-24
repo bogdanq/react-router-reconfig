@@ -1,9 +1,14 @@
 import React from 'react'
-import { checkRouteGuards } from '../lib/helpers'
+import { checkRouteGuards } from '../lib'
 import { useStore } from 'effector-react'
 import { $user } from '../model'
 
-export const Access = ({ children, permissions, guards }) => {
+export const Access = ({
+  children,
+  permissions,
+  guards,
+  renderEmpty = () => null
+}) => {
   const user = useStore($user)
 
   const hasCompletedGuards = React.useCallback(
@@ -24,11 +29,11 @@ export const Access = ({ children, permissions, guards }) => {
   }, [permissions, user])
 
   if (guards) {
-    return hasCompletedGuards() ? children : null
+    return hasCompletedGuards() ? children : renderEmpty()
   }
 
   if (permissions) {
-    return hasCompletedPermissions() ? children : null
+    return hasCompletedPermissions() ? children : renderEmpty()
   }
 
   return null

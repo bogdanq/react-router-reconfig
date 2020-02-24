@@ -2,9 +2,12 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter, Link, Switch } from 'react-router-dom'
 import { routes } from './route-config'
-import { createRoutes } from './lib/route-reconfig'
+import { createRoutes } from './lib'
 import { useStore } from 'effector-react'
 import { $user } from './model'
+import { Transition } from './organisms/transition'
+import { MainTemplate } from './template/main'
+import { createGlobalStyle, css } from 'styled-components'
 import './styles.css'
 
 function App() {
@@ -18,13 +21,16 @@ function App() {
       }),
     [user]
   )
-
+  console.log(Routes)
   return (
-    <>
-      <BrowserRouter>
-        <Switch>{Routes}</Switch>
-      </BrowserRouter>
-    </>
+    <BrowserRouter>
+      <MainTemplate>
+        <Styles />
+        <Transition>
+          <Switch>{Routes}</Switch>
+        </Transition>
+      </MainTemplate>
+    </BrowserRouter>
   )
 }
 
@@ -38,6 +44,12 @@ export function Back() {
     </ul>
   )
 }
+
+const Styles = createGlobalStyle(css`
+  :root {
+    --main-bg-color: red;
+  }
+`)
 
 const rootElement = document.getElementById('root')
 ReactDOM.render(<App />, rootElement)

@@ -20,7 +20,7 @@ export function createRoutes<Context>({
         const newRoute = (
           <Route
             key={index}
-            exact={route.exact}
+            exact={route.exact === false ? route.exact : true}
             path={path}
             component={(props: {
               match: {
@@ -48,7 +48,11 @@ export function createRoutes<Context>({
           !checkRouteGuards<Context>(route.guards, context)
         ) {
           if (route.fallback) {
-            const isDeleteRouteChildren = { ...route, children: [] }
+            const isDeleteRouteChildren = {
+              ...route,
+              exact: route.exact === false ? route.exact : true,
+              children: []
+            }
             return acc.concat(
               renderRouteFallback<Context>(isDeleteRouteChildren)
             )

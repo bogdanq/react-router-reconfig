@@ -27,7 +27,10 @@
     "eject": "react-scripts eject",
     "build:ts": "tsc"
   },
-  "dependencies": {},
+  "dependencies": {
+    "react-transition-group": "4.3.0",
+    "styled-components": "5.0.1"
+  },
   "devDependencies": {
     "@types/react-dom": "16.9.4",
     "@types/react-router-dom": "5.1.3",
