@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 import { Switch, Route } from 'react-router-dom'
 import {
   checkRouteGuards,
@@ -15,12 +15,12 @@ export function createRoutes<Context>({
 }: CreateRoutes<Context>): Array<React.ReactNode> {
   return Array.isArray(config)
     ? config.reduce<Array<React.ReactNode>>((acc, route, index) => {
-        const path = rootPath + route.path
+        const path = rootPath + route.path.replace(/\*/g, '/*')
 
         const newRoute = (
           <Route
             key={index}
-            exact={route.exact}
+            exact={route.exact === false ? route.exact : true}
             path={path}
             component={(props: {
               match: {
@@ -38,7 +38,7 @@ export function createRoutes<Context>({
                 )
               }
 
-              return route.component({ ...props, userProps })
+              return route.component({ ...props, ...userProps })
             }}
           />
         )
@@ -48,7 +48,14 @@ export function createRoutes<Context>({
           !checkRouteGuards<Context>(route.guards, context)
         ) {
           if (route.fallback) {
-            return acc.concat(renderRouteFallback<Context>(route))
+            const isDeleteRouteChildren = {
+              ...route,
+              exact: route.exact === false ? route.exact : true,
+              children: []
+            }
+            return acc.concat(
+              renderRouteFallback<Context>(isDeleteRouteChildren)
+            )
           }
           return acc
         }
@@ -57,13 +64,15 @@ export function createRoutes<Context>({
           return acc.concat(newRoute)
         }
 
-        return acc.concat(
-          newRoute,
-          createRoutes({
-            config: route.children,
-            context
-          })
-        )
+        return acc
+          .concat(
+            newRoute,
+            createRoutes({
+              config: route.children,
+              context
+            })
+          )
+          .filter(Boolean)
       }, [])
     : []
 }
@@ -73,7 +82,6 @@ const RootMemoRoute = React.memo(
     return (
       <route.component
         {...props}
-        context={context}
         renderNestedRoute={(userProps: object) => (
           <Switch>
             {createRoutes({

@@ -1,37 +1,18 @@
-const userTestPermission = {
-  id: '0002154',
-  rules: [
-    {
-      name: 'Administrator',
-      permissions: []
-    },
-    {
-      name: 'Vip',
-      permissions: []
-    }
-  ]
-}
+// function applyArgsToGuard(guard, args) {
+//   return context => guard({ ...context, ...args });
+// }
 
 export type Context = {
   user?: {
     id: string
-    rules: Array<{ rules: [string]; name: string }>
+    rules: {
+      role: string
+    }
   }
 }
-
 export type Roles = (arg: Context) => boolean
 
-//rules name [string!]! =>  Administrator | Manager | Vip
-
-// function applyArgsToGuard(guard, args) {
-//   return context => guard({ ...context, ...args });
-// }
-
-//rules name [string!]! =>  Administrator | Manager | Vip
-// function applyArgsToGuard(guard, args) {
-//   return context => guard({ ...context, ...args });
-// }
-
+// Partner | AdAgent | Manager | Administrator
 function onlyAuth(context: Context) {
   return Boolean(context.user)
 }
@@ -39,38 +20,33 @@ function onlyAuth(context: Context) {
 function onlyManager(context: Context) {
   const user = context.user
   if (user) {
-    return user.rules.some(rule => rule.name === 'Manager')
+    return user.rules.role === 'Manager'
   }
-
-  return false
+}
+function onlyPartner(context: Context) {
+  const user = context.user
+  if (user) {
+    return user.rules.role === 'Partner'
+  }
 }
 
 function onlyAdmin(context: Context) {
   const user = context.user
   if (user) {
-    return user.rules.some(rule => rule.name === 'Administrator')
+    return user.rules.role === 'Administrator'
   }
-
-  return false
 }
 
-function onlyVip(context: Context) {
+function onlyAdAgent(context: Context) {
   const user = context.user
   if (user) {
-    return user.rules.some(rule => rule.name === 'Vip')
+    return user.rules.role === 'AdAgent'
   }
-
-  return false
 }
 
 function onlyRoles(roles: Array<Roles>) {
   return (context: Context) => {
-    const user = context.user
-    if (user) {
-      return roles.some(role => role(context))
-    }
-
-    return false
+    return roles.some(role => role(context))
   }
 }
 
@@ -84,8 +60,8 @@ export {
   onlyAuth,
   onlyManager,
   onlyAdmin,
-  onlyVip,
   onlyRoles,
   besideOwner,
-  userTestPermission
+  onlyAdAgent,
+  onlyPartner
 }

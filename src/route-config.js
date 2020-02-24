@@ -1,84 +1,83 @@
 import React from 'react'
-import { HomePage } from './Pages/main'
-import { Cabinet, VipUser, UserInfo } from './Pages/user'
-import { onlyAuth, onlyVip, onlyRoles, onlyAdmin, onlyManager } from './rules'
-import { PostList, Posts, PostCreate, PostUpdate } from './Pages/posts'
-import { Admin } from './Pages/admin'
+import {
+  onlyAuth,
+  // onlyRoles,
+  onlyAdmin,
+  onlyPartner,
+  onlyManager,
+  besideOwner
+} from './rules'
 import { Back } from '.'
 import { Redirect } from 'react-router-dom'
+import { Home, HomeFallback } from './pages/home'
+import { SignIn } from './pages/sign-in'
+import { SignOut, SignOutFallback } from './pages/sign-out'
+import { FullReport, FullReportFallback } from './pages/full'
+import { PlayersReport, PlayersReportFallback } from './pages/players'
+import { QuickReport, QuickReportFallback } from './pages/quick'
+import { Cabinet } from './pages/main'
 
 export const routes = () => [
   {
-    component: HomePage,
-    exact: true,
-    path: '/'
+    component: Home,
+    path: '/',
+    guards: [besideOwner([onlyAuth])],
+    fallback: HomeFallback
+  },
+  {
+    component: SignIn,
+    path: '/sign-in',
+    guards: [besideOwner([onlyAuth])],
+    fallback: () => <Redirect to="/cabinet" />
+  },
+  {
+    component: SignOut,
+    path: '/sign-out',
+    guards: [onlyAuth],
+    fallback: SignOutFallback
+  },
+  {
+    component: FullReport,
+    path: '/full',
+    guards: [onlyAuth, besideOwner([onlyPartner])],
+    fallback: FullReportFallback
+  },
+  {
+    component: PlayersReport,
+    path: '/players',
+    guards: [onlyAuth, besideOwner([onlyManager])],
+    fallback: PlayersReportFallback
+  },
+  {
+    component: QuickReport,
+    path: '/quick',
+    guards: [onlyAuth, besideOwner([onlyAdmin])],
+    fallback: QuickReportFallback
   },
   {
     component: Cabinet,
     exact: false,
     path: '/cabinet',
+    fallback: () => <Redirect to="/" />,
     guards: [onlyAuth],
     children: [
       {
-        component: VipUser,
-        exact: true,
-        path: '/promo',
-        guards: [onlyVip]
+        path: '/info',
+        component: () => <h1>info</h1>
       },
       {
-        component: UserInfo,
-        exact: true,
-        path: '/info'
-      },
-      {
-        component: () => <h1>you has not permission (vip)</h1>,
-        path: '/*'
+        component: () => <h1>404 cabinet</h1>,
+        path: '*'
       }
     ]
-  },
-  {
-    component: PostList,
-    exact: false,
-    path: '/posts',
-    children: [
-      {
-        component: Posts,
-        exact: true,
-        path: '/'
-      },
-      {
-        component: PostCreate,
-        exact: true,
-        path: '/create',
-        guards: [onlyAuth]
-      },
-      {
-        component: PostUpdate,
-        exact: true,
-        path: '/update/:id',
-        guards: [onlyAuth, onlyRoles([onlyAdmin, onlyManager])]
-      },
-      {
-        component: () => <h1>you has not permission (manager/admin)</h1>,
-        path: '/*'
-      }
-    ]
-  },
-  {
-    component: Admin,
-    exact: true,
-    path: '/admin',
-    /** Можно обработать редирект на конкретной странице, либо передать 404 - уникальную для всех страниц */
-    fallback: () => <Redirect to="/" />,
-    guards: [onlyAuth, onlyAdmin]
   },
   {
     component: () => (
       <>
         <Back />
-        <h1>you has not permission (admin)</h1>
+        <h1>Такой страницы нет!</h1>
       </>
     ),
-    path: '/*'
+    path: '*'
   }
 ]
