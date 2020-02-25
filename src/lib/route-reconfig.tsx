@@ -15,7 +15,7 @@ export function createRoutes<Context>({
 }: CreateRoutes<Context>): Array<React.ReactNode> {
   return Array.isArray(config)
     ? config.reduce<Array<React.ReactNode>>((acc, route, index) => {
-        const path = rootPath + route.path.replace(/\*/g, '/*')
+        const path = rootPath + route.path
 
         const newRoute = (
           <Route
