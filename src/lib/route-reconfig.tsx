@@ -6,7 +6,7 @@ import {
   hasRouteChildren
 } from './helpers'
 import { MemoParent, CreateRoutes } from './typings'
-import urljoin from 'url-join'
+const urljoin = require('url-join')
 
 export function createRoutes<Context>({
   config,
