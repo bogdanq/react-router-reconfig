@@ -41,7 +41,11 @@ export function createRoutes<Context>({
 
               // если дочерних компонентов нет - вернуть переданнй компонент
               // передав props - компоненты, а так же userProps - кастомный пропсы
-              return route.component({ ...props, ...userProps })
+              if (typeof route.component === 'function') {
+                return route.component({ ...props, ...userProps })
+              }
+
+              return <route.component {...props} {...userProps} />
             }}
           />
         )

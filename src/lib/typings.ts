@@ -11,10 +11,11 @@ export type RouteType<Context> = {
   path: string
   exact?: boolean
   children?: Array<RouteType<Context>> | null
-  component: (props: {
-    userProps?: object
-    match: { path: string }
-  }) => JSX.Element
+  component:
+    | ((props: { userProps?: object; match: { path: string } }) => JSX.Element)
+    | React.MemoExoticComponent<
+        (props?: { userProps?: object; match: { path: string } }) => JSX.Element
+      >
   fallback?: React.ComponentType
   guards?: Array<(context: Context) => boolean>
 }
@@ -30,5 +31,5 @@ export type RouteProps<Context> = {
   children?: Array<RouteType<Context>> | null
 }
 
-export type RenderNestedRoute = (userProps: object) => JSX.Element
+export type RenderNestedRoute = (userProps?: object) => JSX.Element
 export type RouteTypes<Context> = Array<RouteType<Context>>
