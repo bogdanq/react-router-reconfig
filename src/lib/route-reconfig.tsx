@@ -17,7 +17,7 @@ export function createRoutes<Context>({
   return Array.isArray(config)
     ? config.reduce<Array<React.ReactNode>>((acc, route, index) => {
         const path = urljoin(rootPath, route.path)
-        console.log('path', path)
+
         const newRoute = (
           <Route
             key={index}
