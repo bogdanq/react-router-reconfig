@@ -24,12 +24,13 @@
     "build": "tsc",
     "demo": "parcel --out-dir demo/dist demo/index.html"
   },
-  "peerDependencies": {
-    "react": "^16.12.0",
-    "react-dom": "16.8.6",
-    "react-router-dom": "5.1.2"
+  "dependencies": {
+    "@types/url-join": "4.0.0",
+    "react": "16.12.0",
+    "react-dom": "16.12.0",
+    "react-router-dom": "5.1.2",
+    "url-join": "4.0.1"
   },
-  "dependencies": {},
   "devDependencies": {
     "@babel/cli": "7.8.4",
     "@babel/core": "7.8.4",

@@ -6,17 +6,18 @@ import {
   hasRouteChildren
 } from './helpers'
 import { MemoParent, CreateRoutes } from './typings'
+import urljoin from 'url-join'
 
 export function createRoutes<Context>({
   config,
-  rootPath = '',
+  rootPath = '/',
   context,
   userProps
 }: CreateRoutes<Context>): Array<React.ReactNode> {
   return Array.isArray(config)
     ? config.reduce<Array<React.ReactNode>>((acc, route, index) => {
-        const path = rootPath + route.path
-
+        const path = urljoin(rootPath, route.path)
+        console.log('path', path)
         const newRoute = (
           <Route
             key={index}
